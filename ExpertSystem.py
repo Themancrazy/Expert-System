@@ -8,6 +8,9 @@ def ExpertSystem():
     if (len(sys.argv) != 2):
         print("usage: python3 ExpertSystem.py <KnowledgeBaseFile>")
         exit(0)
-    parser.fileParsing(sys.argv[1])
+    r, fact, query = parser.fileParsing(sys.argv[1])
+    print(r.lines[1])
+    print(fact.facts)
+    print(query.queriedFactNum[0])
 
 ExpertSystem()
