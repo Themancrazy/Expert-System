@@ -15,6 +15,13 @@ class Query:
     def __init__(self):
         self.queriedFactNum = []
 
+def removeWs(line):
+    line = line.strip()
+    line = line.replace(" ", "")
+    line = line.replace("\t", "")
+    # print(line)
+    return line
+
 def setFacts(fact, initFacts):
     i = 0
     while (i < len(initFacts)):
@@ -56,12 +63,19 @@ def fileParsing(filename):
         lineList = f.readlines()
     lineList = parseLines(lineList)
     i = 0
+    # while (i < len(lineList)):
+    #     r.lines.append(re.split("[ |\t]+", lineList[i].strip()))
+    #     if (r.lines[i][0][0] == '='):
+    #         fact = setFacts(fact, r.lines[i][0][1:])
+    #     elif (r.lines[i][0][0] == '?'):
+    #         query = setQuery(query, r.lines[i][0][1:])
+    #     i += 1
     while (i < len(lineList)):
-        r.lines.append(re.split("[ |\t]+", lineList[i].strip()))
-        if (r.lines[i][0][0] == '='):
-            fact = setFacts(fact, r.lines[i][0][1:])
-        elif (r.lines[i][0][0] == '?'):
-            query = setQuery(query, r.lines[i][0][1:])
+        r.lines.append(removeWs(lineList[i]))
+        if (r.lines[i][0] == '='):
+            fact = setFacts(fact, r.lines[i][1:])
+        elif (r.lines[i][0] == '?'):
+            query = setQuery(query, r.lines[i][1:])
         i += 1
     return r, fact, query;
     
