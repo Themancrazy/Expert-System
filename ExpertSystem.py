@@ -39,10 +39,12 @@ class ExpertSystem:
         self.rules, self.facts, self.queries, self.goals = parser.fileParsing(sys.argv[1])
         for query in self.queries.queriedFacts:
             self.goals.push(query)
+        self.toRPN()
 
     def toRPN(self):
         stack = parser.Stack()
 
+        notSign = 0
         # Adding an extra character to avoid underflow
         stack.push('#')
         newRules = []
@@ -132,10 +134,26 @@ class ExpertSystem:
             for char in rule:
                 if (char.isalnum()):
                     stack.push(char)
-                else:
-                    op1 = self.recurse(stack.top())
+                elif char is '!':
+                    if type(stack.top()) is not bool:
+                        op1 = self.recurse(stack.top())
+                    else:
+                        op1 = stack.top()
                     stack.pop()
-                    op2 = self.recurse(stack.top())
+                    if op1 == False:
+                        stack.push(True)
+                    elif op1 == True:
+                        stack.push(False)
+                else:
+                    if type(stack.top()) is not bool:
+                        op1 = self.recurse(stack.top())
+                    else:
+                        op1 = stack.top()
+                    stack.pop()
+                    if type(stack.top()) is not bool:
+                        op2 = self.recurse(stack.top())
+                    else:
+                        op2 = stack.top()
                     stack.pop()
                     if (char is '+'):
                         stack.push(op1 & op2)

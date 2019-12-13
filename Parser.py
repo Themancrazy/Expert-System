@@ -157,11 +157,27 @@ class Stack:
         else:
             print("Stack is empty")
 
+def isOperator(c):
+    if (c is '+' or c is '-' or c is '|' or c is '!'):
+        return 1
+
+# Verifies line's validity and returns an error if invalid
+def verifline(line):
+    i = 0
+    allowedChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ=><!+-^()|"
+    while (i < len(line)):
+        if (i + 1 < len(line) and isOperator(line[i]) and isOperator(line[i + 1])):
+            raise Exception(line, "is invalid.")
+        if (line[i] not in allowedChar):
+            raise Exception(line, "is invalid.")
+        i += 1
+            
 # Removing whitespaces
 def removeWs(line):
     line = line.strip()
     line = line.replace(" ", "")
     line = line.replace("\t", "")
+    verifline(line)
     return line
 
 # Function called to set the facts
