@@ -132,7 +132,10 @@ class Query:
         for query in self.queriedFacts:
             print(query)
 
+# --------------------------------------------------------------
 # Class used as a stack to store the current goal we are trying to evaluate
+# --------------------------------------------------------------
+
 class Stack:
     def __init__(self):
         self.stack = deque()
@@ -161,29 +164,39 @@ def isOperator(c):
     if (c is '+' or c is '-' or c is '|' or c is '!'):
         return 1
 
+# --------------------------------------------------------------
 # Verifies line's validity and returns an error if invalid
-def verifline(line):
-    i = 0
-    allowedChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ=><!+-^()|"
-    while (i < len(line)):
-        if (i + 1 < len(line) and isOperator(line[i]) and isOperator(line[i + 1])):
-            raise Exception(line, "is invalid.")
-        if (line[i] not in allowedChar):
-            raise Exception(line, "is invalid.")
-        i += 1
+# --------------------------------------------------------------
+
+# def verifline(line):
+#     i = 0
+#     allowedChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZ=><!+-^()|"
+#     while (i < len(line)):
+#         if (i + 1 < len(line) and isOperator(line[i]) and isOperator(line[i + 1])):
+#             raise Exception(line, "is invalid.")
+#         if (line[i] not in allowedChar):
+#             raise Exception(line, "is invalid.")
+#         i += 1
             
+# --------------------------------------------------------------
 # Removing whitespaces
+# --------------------------------------------------------------
+
 def removeWs(line):
     line = line.strip()
+    line = line.rstrip()
     line = line.replace(" ", "")
     line = line.replace("\t", "")
-    # verifline(line)
+    line = line.replace('\n', "")
     return line
 
+# --------------------------------------------------------------
 # Function called to set the facts
+# We loop through each fact, check if it is in the range [A:Z], and set it to True if it is
+# --------------------------------------------------------------
+
 def setFacts(fact, initFacts):
 
-    # We loop through each fact, check if it is in the range [A:Z], and set it to True if it is
     for f in initFacts:
         if (ord(f) < 65 or ord(f) > 90):
             raise Exception(f, " is invalid.")
@@ -198,48 +211,51 @@ def setQuery(query, line):
     return query
 
 
+# --------------------------------------------------------------
 # Function called to parse the list of lines
+# We loop through the list, and delete any comment we don't want
+# Handles the parsing of the file
+# --------------------------------------------------------------
+
 def parseLines(lineList):
 
-    # We loop through the list, and delete any comment we don't want
     i = 0
     while (i < len(lineList)):
-        lineList[i] = lineList[i].strip()
+        lineList[i] = removeWs(lineList[i].rstrip())
         if ('#' in lineList[i]):
             lineList[i] = lineList[i][:lineList[i].find('#')]
-        if (len(lineList[i]) == 0):
+        if (lineList[i] == "\n"):
             del lineList[i]
         i += 1
+    print(lineList)
     return lineList
 
-# Handles the parsing of the file
+# -------------------------------------------------------------
+# Creating instances of the rules, facts, and query classes
+#  We read the file and store all the lines in a list of string
+# Then we parse the strings, making a first clean
+# Finally we loop through the list of strings and we fill the data in our classes
+# End we return the rules, facts and queries
+# -------------------------------------------------------------
+
 def fileParsing(filename):
 
-    # Creating instances of the rules, facts, and query classes
     r = Rules()
     fact = Facts()
     query = Query()
     goal = Stack()
-    i = 0
     
-    # We read the file and store all the lines in a list of string
     with open(filename) as f:
         lineList = f.readlines()
-
-    # Then we parse the strings, making a first clean
     lineList = parseLines(lineList)
-
-    i = 0
-
-    # Finally we loop through the list of strings and we fill the data in our classes
     for line in lineList:
-        if line[0] == '=':
+        if (len(line) is 0):
+            pass
+        elif line[0] == '=' and len(line) > 1:
             fact = setFacts(fact, line[1:])
-        elif (line[0] == '?'):
+        elif line[0] == '?' and len(line) > 1:
             query = setQuery(query, line[1:])
         else:
             r.lines.append(removeWs(line))
-
-    # End we return the rules, facts and queries
     return r, fact, query, goal;
     

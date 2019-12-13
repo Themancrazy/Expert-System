@@ -44,7 +44,6 @@ class ExpertSystem:
     def toRPN(self):
         stack = parser.Stack()
 
-        notSign = 0
         # Adding an extra character to avoid underflow
         stack.push('#')
         newRules = []
@@ -167,7 +166,7 @@ class ExpertSystem:
                 res = stack.top()
                 stack.pop()
                 results.append(res)
-        print(results)
+        # print(results)
         t = 0
         f = 0
         for result in results:
