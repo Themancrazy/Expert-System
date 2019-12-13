@@ -1,5 +1,7 @@
-?AB
-=D
-B+C => A
-D|E => B
-B^W=> C
+B + C=>A
+D|E =>B
+B|W=>C
+
+?A
+
+=
