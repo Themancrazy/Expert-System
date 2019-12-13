@@ -141,6 +141,8 @@ class ExpertSystem:
                         stack.push(op1 & op2)
                     elif (char is '|'):
                         stack.push(op1 | op2)
+                    elif (char is '^'):
+                        stack.push(op1 ^ op2)
             res = stack.top()
             stack.pop()
         self.facts.facts[goal]["value"] = res
