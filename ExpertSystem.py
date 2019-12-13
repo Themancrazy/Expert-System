@@ -30,15 +30,12 @@ class ExpertSystem:
         self.rules = parser.Rules()
         self.facts = parser.Facts()
         self.queries = parser.Query()
-        self.goals = parser.Stack()
 
     def start(self):
         if (len(sys.argv) != 2):
             print("usage: python3 ExpertSystem.py <KnowledgeBaseFile>")
             exit(0)
-        self.rules, self.facts, self.queries, self.goals = parser.fileParsing(sys.argv[1])
-        for query in self.queries.queriedFacts:
-            self.goals.push(query)
+        self.rules, self.facts, self.queries = parser.fileParsing(sys.argv[1])
         self.toRPN()
 
     def toRPN(self):
@@ -104,9 +101,6 @@ class ExpertSystem:
         del self.rules
         self.rules = newClass
 
-        # Checking if it worked
-        self.rules.display()
-
     # Method returning the indexes of the rules containing our goal in the RHS
     def findGoalInRules(self, char):
         i = -1
@@ -120,6 +114,7 @@ class ExpertSystem:
 
     # Main recursion
     def recurse(self, goal):
+        # print("Looking for " + goal)
         # If we already know the value for sure then we return True
         if (self.facts.facts[goal]["visited"] is True):
             return self.facts.facts[goal]["value"]
@@ -167,7 +162,7 @@ class ExpertSystem:
                 res = stack.top()
                 stack.pop()
                 results.append(res)
-        print(results)
+        # print("Results" + str(results))
         t = 0
         f = 0
         for result in results:
@@ -189,69 +184,49 @@ class ExpertSystem:
             return False
 
     def evaluate(self):
+        # Printing the rules
+        print("Rules:")
+        self.rules.display()
+        print("\nWe are looking for " + str(self.queries.queriedFacts))
         for query in self.queries.queriedFacts:
             v = self.recurse(query)
             if v is True:
-                print("True")
+                print(query + " is true")
             elif v is None:
-                print("Undertermined")
+                print(query + " is undertermined")
             else:
-                print("False")
+                print(query + " is false")
+        print()
             
+    # Function called at the end of the evaluation to allow the user to ask for new queries
+    def reloop(self):
+        while (True):
+            print("Try again? yes/no")
+            line = input()
 
+            if line == "yes":
+                # Printing the previous facts
+                print("\nPrevious Facts:\n=", end="")
+                print(self.facts.line, end="")
+                
+                # Getting the new facts and resetting them
+                line = input("\nNew facts:\n=")
+                self.facts.reset(line)
 
+                # Printing the previous query
+                print("\nPrevious Query:\n?", end="")
+                self.queries.display()
 
+                # Getting the new query and resetting them
+                line = input("\nNew Query:\n?")
+                self.queries.reset(line)
+                print()
 
+                # Starting the main recursion again, with the new values
+                self.evaluate()
 
+            elif line == "no":
+                break
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- # # Function evaluating the given rule, checking if we can get
-    # # the value of the RHS based on the LHS, and adding new goals if necessary
-    # def evaluateRule(self, i):
-    #     # Getting the LHS
-    #     rule = self.rules.lines[i][:self.rules.lines[i].find('=')]
-    #     # Creating a stack to evaluate the LFS
-    #     stack = parser.Stack()
-    #     # Looping through each character of the expression and evaluating it
-    #     for char in rule:
-    #         if (char.isalnum()):
-    #             stack.push(char)
-    #         else:
-    #             op1 = self.facts.facts[ord(stack.top()) - 65]
-    #             stack.pop()
-    #             op2 = self.facts.facts[ord(stack.top()) - 65]
-    #             stack.pop()
-    #             if (char is '&')
-    #                 stack.push(op1 & op2)
-    #             elif (char is '|')
-    #                 stack.push(op1 | op2)
-    #     res = stack.top()
-    #     stack.pop()
-    #     return res, 
+            else:
+                print("We can't recognize the input\n")

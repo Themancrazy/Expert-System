@@ -1,4 +1,5 @@
-?C
-=AB
-A + B => C
-A + !B => C
+?AB
+=D
+B+C => A
+D|E => B
+B^W=> C

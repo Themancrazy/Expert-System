@@ -120,9 +120,29 @@ class Facts:
                 "visited": False
             }
         }
+        self.line = ""
 
     def display(self):
-        print(self.facts)
+        for fact in self.facts:
+            print(fact + "  ->  " + str(self.facts[fact]["value"]).ljust(len("False")) + "  ->  visited: " + str(self.facts[fact]["visited"]))
+    
+    def shortDisplay(self):
+        print("=", end="")
+        for fact in self.facts:
+            if self.facts[fact]["value"] == True:
+                print(fact, end="")
+    
+    def reset(self, facts):
+        # First I reset everything back to false
+        for fact in self.facts:
+            self.facts[fact]["value"] = False
+            self.facts[fact]["visited"] = False
+        for char in facts:
+            if (ord(char) < 65 or ord(char) > 90):
+                raise Exception(char, " is invalid.")
+            else:
+                self.facts[char]["value"] = True
+
 
 class Query:
     def __init__(self):
@@ -130,7 +150,13 @@ class Query:
 
     def display(self):
         for query in self.queriedFacts:
-            print(query)
+            print(query, end="")
+    
+    def reset(self, newQueries):
+        for char in newQueries:
+            if (ord(char) < 65 or ord(char) > 90):
+                raise Exception(char, " is invalid.")
+        self.queriedFacts = fromStringToList(newQueries)
 
 # Class used as a stack to store the current goal we are trying to evaluate
 class Stack:
@@ -161,6 +187,12 @@ def isOperator(c):
     if (c is '+' or c is '-' or c is '|' or c is '!'):
         return 1
 
+def fromStringToList(string):
+    l = []
+    for char in string:
+        l.append(char)
+    return l
+
 # Verifies line's validity and returns an error if invalid
 def verifline(line):
     i = 0
@@ -188,6 +220,7 @@ def setFacts(fact, initFacts):
         if (ord(f) < 65 or ord(f) > 90):
             raise Exception(f, " is invalid.")
         fact.facts[f]["value"] = True
+        fact.line += f
     return fact
 
 def setQuery(query, line):   
@@ -219,7 +252,6 @@ def fileParsing(filename):
     r = Rules()
     fact = Facts()
     query = Query()
-    goal = Stack()
     i = 0
     
     # We read the file and store all the lines in a list of string
@@ -241,5 +273,5 @@ def fileParsing(filename):
             r.lines.append(removeWs(line))
 
     # End we return the rules, facts and queries
-    return r, fact, query, goal;
+    return r, fact, query
     

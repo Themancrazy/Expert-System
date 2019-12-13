@@ -8,6 +8,7 @@ system.start()
 # system.facts.display()
 
 system.evaluate()
+system.reloop()
 
 # system.evaluate(system.goals.top())
 
