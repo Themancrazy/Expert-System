@@ -106,12 +106,18 @@ class ExpertSystem:
     def findGoalInRules(self, char):
         i = -1
         found = []
+        otherGoal = [char]
         for line in self.rules.lines:
             i += 1
             rhs = line[line.find('>') + 1:]
+            # print(rhs)
             if char in rhs:
                 found.append(i)
-        return found
+            if '+' in rhs:
+                for x in rhs:
+                    if (ord(x) >= 65 and ord(x) <= 90) and (x is not char):
+                        otherGoal.append(x)
+        return found, otherGoal
     # ---------------------------------------------------------------------
     # Main recursion
     # print("Looking for " + goal)
@@ -128,7 +134,7 @@ class ExpertSystem:
             return self.facts.facts[goal]["value"]
         res = self.facts.facts[goal]["value"]
         results = []
-        indexes = self.findGoalInRules(goal)
+        indexes, goals = self.findGoalInRules(goal)
         if len(indexes) > 0:
             for index in indexes:
                 rule = self.rules.lines[index][:self.rules.lines[index].find('=')]
@@ -164,6 +170,7 @@ class ExpertSystem:
                         elif (char is '^'):
                             stack.push(op1 ^ op2)
                 res = stack.top()
+                print(str(op1) + " " + str(op2) + " = " + str(res))
                 stack.pop()
                 results.append(res)
         t = 0
@@ -171,20 +178,31 @@ class ExpertSystem:
         for result in results:
             if result is True:
                 t += 1
-            else:
+            elif result is False:
                 f += 1
         self.facts.facts[goal]["visited"] = True
-        if ((t > 0 and f > 0) or (f > 0 and t > 0)):
-            self.facts.facts[goal]["value"] = None
-            return None
-        if t > 0 and f == 0:
-            self.facts.facts[goal]["value"] = True
-            return True
-        elif t == 0 and f == 0:
-            return self.facts.facts[goal]["value"]
-        else:
-            self.facts.facts[goal]["value"] = False
-            return False
+        for g in goals:
+            if ((t > 0 and f > 0) or (f > 0 and t > 0)):
+                self.facts.facts[g]["value"] = None
+            if t > 0 and f == 0:
+                self.facts.facts[g]["value"] = True
+            elif t == 0 and f == 0:
+                pass
+            else:
+                self.facts.facts[g]["value"] = False
+        return self.facts.facts[goal]["value"]
+        # if len(otherGoal) == 0:                
+        # if ((t > 0 and f > 0) or (f > 0 and t > 0)):
+        #     self.facts.facts[goal]["value"] = None
+        #     return None
+        # if t > 0 and f == 0:
+        #     self.facts.facts[goal]["value"] = True
+        #     return True
+        # elif t == 0 and f == 0:
+            # return self.facts.facts[goal]["value"]
+        # else:
+        #     self.facts.facts[goal]["value"] = False
+        #     return False
 
     # Printing the rules
     def evaluate(self):
