@@ -177,7 +177,7 @@ def removeWs(line):
     line = line.strip()
     line = line.replace(" ", "")
     line = line.replace("\t", "")
-    verifline(line)
+    # verifline(line)
     return line
 
 # Function called to set the facts

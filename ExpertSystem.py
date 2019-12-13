@@ -107,15 +107,16 @@ class ExpertSystem:
         # Checking if it worked
         self.rules.display()
 
-    # Method returning the index of the rule containing our goal in the RHS
+    # Method returning the indexes of the rules containing our goal in the RHS
     def findGoalInRules(self, char):
         i = -1
+        found = []
         for line in self.rules.lines:
             i += 1
             rhs = line[line.find('>') + 1:]
             if char in rhs:
-                return i
-        return -1
+                found.append(i)
+        return found
 
     # Main recursion
     def recurse(self, goal):
@@ -124,53 +125,76 @@ class ExpertSystem:
             return self.facts.facts[goal]["value"]
         # Search for goal implied in the rules
         res = self.facts.facts[goal]["value"]
-        index = self.findGoalInRules(goal)
-        if index >= 0:
-            # Getting the LHS
-            rule = self.rules.lines[index][:self.rules.lines[index].find('=')]
-            # Creating a stack to evaluate the LFS
-            stack = parser.Stack()
-            # Looping through each character of the expression and evaluating it
-            for char in rule:
-                if (char.isalnum()):
-                    stack.push(char)
-                elif char is '!':
-                    if type(stack.top()) is not bool:
-                        op1 = self.recurse(stack.top())
+        results = []
+        indexes = self.findGoalInRules(goal)
+        if len(indexes) > 0:
+            for index in indexes:
+                # Getting the LHS
+                rule = self.rules.lines[index][:self.rules.lines[index].find('=')]
+                # Creating a stack to evaluate the LFS
+                stack = parser.Stack()
+                # Looping through each character of the expression and evaluating it
+                for char in rule:
+                    if (char.isalnum()):
+                        stack.push(char)
+                    elif char is '!':
+                        if type(stack.top()) is not bool:
+                            op1 = self.recurse(stack.top())
+                        else:
+                            op1 = stack.top()
+                        stack.pop()
+                        if op1 == False:
+                            stack.push(True)
+                        elif op1 == True:
+                            stack.push(False)
                     else:
-                        op1 = stack.top()
-                    stack.pop()
-                    if op1 == False:
-                        stack.push(True)
-                    elif op1 == True:
-                        stack.push(False)
-                else:
-                    if type(stack.top()) is not bool:
-                        op1 = self.recurse(stack.top())
-                    else:
-                        op1 = stack.top()
-                    stack.pop()
-                    if type(stack.top()) is not bool:
-                        op2 = self.recurse(stack.top())
-                    else:
-                        op2 = stack.top()
-                    stack.pop()
-                    if (char is '+'):
-                        stack.push(op1 & op2)
-                    elif (char is '|'):
-                        stack.push(op1 | op2)
-                    elif (char is '^'):
-                        stack.push(op1 ^ op2)
-            res = stack.top()
-            stack.pop()
-        self.facts.facts[goal]["value"] = res
+                        if type(stack.top()) is not bool:
+                            op1 = self.recurse(stack.top())
+                        else:
+                            op1 = stack.top()
+                        stack.pop()
+                        if type(stack.top()) is not bool:
+                            op2 = self.recurse(stack.top())
+                        else:
+                            op2 = stack.top()
+                        stack.pop()
+                        if (char is '+'):
+                            stack.push(op1 & op2)
+                        elif (char is '|'):
+                            stack.push(op1 | op2)
+                        elif (char is '^'):
+                            stack.push(op1 ^ op2)
+                res = stack.top()
+                stack.pop()
+                results.append(res)
+        print(results)
+        t = 0
+        f = 0
+        for result in results:
+            if result is True:
+                t += 1
+            else:
+                f += 1
         self.facts.facts[goal]["visited"] = True
-        return res
+        if ((t > 0 and f > 0) or (f > 0 and t > 0)):
+            self.facts.facts[goal]["value"] = None
+            return None
+        if t > 0 and f == 0:
+            self.facts.facts[goal]["value"] = True
+            return True
+        elif t == 0 and f == 0:
+            return self.facts.facts[goal]["value"]
+        else:
+            self.facts.facts[goal]["value"] = False
+            return False
 
     def evaluate(self):
         for query in self.queries.queriedFacts:
-            if self.recurse(query):
+            v = self.recurse(query)
+            if v is True:
                 print("True")
+            elif v is None:
+                print("Undertermined")
             else:
                 print("False")
             
