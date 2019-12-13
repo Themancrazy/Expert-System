@@ -14,17 +14,122 @@ class Rules:
 
 class Facts:
     def __init__(self):
-        self.facts = []
+        self.facts = {
+            'A': {
+                "value": False,
+                "visited": False
+            },
+            'B': {
+                "value": False,
+                "visited": False
+            },
+            'C': {
+                "value": False,
+                "visited": False
+            },
+            'D': {
+                "value": False,
+                "visited": False
+            },
+            'E': {
+                "value": False,
+                "visited": False
+            },
+            'F': {
+                "value": False,
+                "visited": False
+            },
+            'G': {
+                "value": False,
+                "visited": False
+            },
+            'H': {
+                "value": False,
+                "visited": False
+            },
+            'I': {
+                "value": False,
+                "visited": False
+            },
+            'J': {
+                "value": False,
+                "visited": False
+            },
+            'K': {
+                "value": False,
+                "visited": False
+            },
+            'L': {
+                "value": False,
+                "visited": False
+            },
+            'M': {
+                "value": False,
+                "visited": False
+            },
+            'N': {
+                "value": False,
+                "visited": False
+            },
+            'O': {
+                "value": False,
+                "visited": False
+            },
+            'P': {
+                "value": False,
+                "visited": False
+            },
+            'Q': {
+                "value": False,
+                "visited": False
+            },
+            'R': {
+                "value": False,
+                "visited": False
+            },
+            'S': {
+                "value": False,
+                "visited": False
+            },
+            'T': {
+                "value": False,
+                "visited": False
+            },
+            'U': {
+                "value": False,
+                "visited": False
+            },
+            'V': {
+                "value": False,
+                "visited": False
+            },
+            'W': {
+                "value": False,
+                "visited": False
+            },
+            'X': {
+                "value": False,
+                "visited": False
+            },
+            'Y': {
+                "value": False,
+                "visited": False
+            },
+            'Z': {
+                "value": False,
+                "visited": False
+            }
+        }
 
     def display(self):
         print(self.facts)
 
 class Query:
     def __init__(self):
-        self.queriedFactNum = []
+        self.queriedFacts = []
 
     def display(self):
-        for query in self.queriedFactNum:
+        for query in self.queriedFacts:
             print query
 
 # Class used as a stack to store the current goal we are trying to evaluate
@@ -36,14 +141,21 @@ class Stack:
         self.stack.append(value)
 
     def top(self):
-        return self.stack[len(self.stack) - 1]
+        if len(self.stack) > 0:
+            return self.stack[len(self.stack) - 1]
+        raise Exception("Stack is empty")
 
     def pop(self):
-        return self.stack.pop()
+        if len(self.stack) > 0:
+            return self.stack.pop()
+        raise Exception("Stack is empty")
 
     def display(self):
-        for goal in self.stack:
-            print goal
+        if len(self.stack) > 0:
+            for goal in self.stack:
+                print goal
+        else:
+            print("Stack is empty")
 
 # Removing whitespaces
 def removeWs(line):
@@ -59,14 +171,14 @@ def setFacts(fact, initFacts):
     for f in initFacts:
         if (ord(f) < 65 or ord(f) > 90):
             raise Exception(f, " is invalid.")
-        fact.facts[ord(f) - 65] = True
+        fact.facts[f]["value"] = True
     return fact
 
-def setQuery(query, queriedFact):   
-    for q in queriedFact:
-        if (ord(q) < 65 or ord(q) > 90):
-            raise Exception(q, " is invalid.")
-        query.queriedFactNum.append(ord(q) - 65)
+def setQuery(query, line):   
+    for char in line:
+        if (ord(char) < 65 or ord(char) > 90):
+            raise Exception(char, " is invalid.")
+        query.queriedFacts.append(char)
     return query
 
 
@@ -93,11 +205,6 @@ def fileParsing(filename):
     query = Query()
     goal = Stack()
     i = 0
-
-    # Initializing every facts to False
-    while (i < 26):
-        fact.facts.append(False)
-        i += 1
     
     # We read the file and store all the lines in a list of string
     with open(filename) as f:
@@ -110,11 +217,12 @@ def fileParsing(filename):
 
     # Finally we loop through the list of strings and we fill the data in our classes
     for line in lineList:
-        r.lines.append(removeWs(line))
         if line[0] == '=':
             fact = setFacts(fact, line[1:])
         elif (line[0] == '?'):
             query = setQuery(query, line[1:])
+        else:
+            r.lines.append(removeWs(line))
 
     # End we return the rules, facts and queries
     return r, fact, query, goal;
