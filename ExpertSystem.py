@@ -119,7 +119,7 @@ class ExpertSystem:
     def evaluate(self, goal):
         # If we already know the value for sure then we return True
         if (self.facts.facts[goal]["visited"] is True):
-            return self.facts.facts[goal].value
+            return self.facts.facts[goal]["value"]
         # Search for goal implied in the rules
         res = self.facts.facts[goal]["value"]
         index = self.findGoalInRules(goal)
@@ -148,10 +148,12 @@ class ExpertSystem:
         return res
 
     def recurse(self):
-        if self.evaluate(self.queries.queriedFacts[0]):
-            print("True")
-        else:
-            print("False")
+        for query in self.queries.queriedFacts:
+            if self.evaluate(query):
+                print("True")
+            else:
+                print("False")
+            
 
 
 

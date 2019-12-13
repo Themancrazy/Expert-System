@@ -4,6 +4,9 @@ system = s.ExpertSystem()
 
 system.start()
 system.toRPN()
+
+# system.facts.display()
+
 system.recurse()
 
 # system.evaluate(system.goals.top())
