@@ -116,7 +116,7 @@ class ExpertSystem:
         return -1
 
     # Main recursion
-    def evaluate(self, goal):
+    def recurse(self, goal):
         # If we already know the value for sure then we return True
         if (self.facts.facts[goal]["visited"] is True):
             return self.facts.facts[goal]["value"]
@@ -133,9 +133,9 @@ class ExpertSystem:
                 if (char.isalnum()):
                     stack.push(char)
                 else:
-                    op1 = self.evaluate(stack.top())
+                    op1 = self.recurse(stack.top())
                     stack.pop()
-                    op2 = self.evaluate(stack.top())
+                    op2 = self.recurse(stack.top())
                     stack.pop()
                     if (char is '+'):
                         stack.push(op1 & op2)
@@ -149,9 +149,9 @@ class ExpertSystem:
         self.facts.facts[goal]["visited"] = True
         return res
 
-    def recurse(self):
+    def evaluate(self):
         for query in self.queries.queriedFacts:
-            if self.evaluate(query):
+            if self.recurse(query):
                 print("True")
             else:
                 print("False")

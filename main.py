@@ -7,7 +7,7 @@ system.toRPN()
 
 # system.facts.display()
 
-system.recurse()
+system.evaluate()
 
 # system.evaluate(system.goals.top())
 
