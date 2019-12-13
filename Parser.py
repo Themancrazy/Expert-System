@@ -142,6 +142,7 @@ class Facts:
                 raise Exception(char, " is invalid.")
             else:
                 self.facts[char]["value"] = True
+        self.line = facts
 
 
 class Query:
