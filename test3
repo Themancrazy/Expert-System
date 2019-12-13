@@ -1,0 +1,10 @@
+B + C => A
+D ^ E => B
+B => C
+
+?A
+
+#With = empty, A should be False
+#With =D, A should be True
+#With =E, A should be True
+#With =DE, A should be False

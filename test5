@@ -1,0 +1,10 @@
+B=>A
+C=>A
+
+?A
+
+
+#With = empty, A should be False
+#With =B, A should be True
+#With =C, A should be True
+#With =BC, A should be True
