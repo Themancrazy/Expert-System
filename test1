@@ -9,5 +9,7 @@ N=>M
 
 ?AFKP
 
+=DEIJP
+
 #=DEIJOP EXPECTED: AFKP all True
 #=DEIJP EXPECTED: AFK all True, K is False

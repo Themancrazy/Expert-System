@@ -169,8 +169,10 @@ class ExpertSystem:
                             stack.push(op1 | op2)
                         elif (char is '^'):
                             stack.push(op1 ^ op2)
-                res = stack.top()
-                print(str(op1) + " " + str(op2) + " = " + str(res))
+                if type(stack.top()) is not bool:
+                    res = self.recurse(stack.top())
+                else:
+                    res = stack.top()
                 stack.pop()
                 results.append(res)
         t = 0
