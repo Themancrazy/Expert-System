@@ -40,8 +40,7 @@ class ExpertSystem:
 
     def toRPN(self):
         stack = parser.Stack()
-
-        notSign = 0
+        
         # Adding an extra character to avoid underflow
         stack.push('#')
         newRules = []

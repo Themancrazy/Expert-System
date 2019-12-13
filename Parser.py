@@ -205,7 +205,6 @@ def removeWs(line):
 
 # Function called to set the facts
 def setFacts(fact, initFacts):
-
     # We loop through each fact, check if it is in the range [A:Z], and set it to True if it is
     for f in initFacts:
         if (ord(f) < 65 or ord(f) > 90):
@@ -223,7 +222,6 @@ def setQuery(query, line):
 
 # Function called to parse the list of lines
 def parseLines(lineList):
-
     i = 0
     while (i < len(lineList)):
         lineList[i] = removeWs(lineList[i].rstrip())
@@ -236,7 +234,6 @@ def parseLines(lineList):
 
 # Handles the parsing of the file
 def fileParsing(filename):
-
     r = Rules()
     fact = Facts()
     query = Query()
