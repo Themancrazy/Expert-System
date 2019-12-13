@@ -10,7 +10,7 @@ class Rules:
 
     def display(self):
         for line in self.lines:
-            print line
+            print(line)
 
 class Facts:
     def __init__(self):
@@ -130,7 +130,7 @@ class Query:
 
     def display(self):
         for query in self.queriedFacts:
-            print query
+            print(query)
 
 # Class used as a stack to store the current goal we are trying to evaluate
 class Stack:
@@ -153,7 +153,7 @@ class Stack:
     def display(self):
         if len(self.stack) > 0:
             for goal in self.stack:
-                print goal
+                print(goal)
         else:
             print("Stack is empty")
 
