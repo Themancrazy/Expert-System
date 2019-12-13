@@ -132,8 +132,10 @@ class Facts:
             if self.facts[fact]["value"] == True:
                 print(fact, end="")
     
+    # --------------------------------
+    # First I reset everything back to false
+    # --------------------------------
     def reset(self, facts):
-        # First I reset everything back to false
         for fact in self.facts:
             self.facts[fact]["value"] = False
             self.facts[fact]["visited"] = False
@@ -159,7 +161,9 @@ class Query:
                 raise Exception(char, " is invalid.")
         self.queriedFacts = fromStringToList(newQueries)
 
+# --------------------------------
 # Class used as a stack to store the current goal we are trying to evaluate
+# --------------------------------
 class Stack:
     def __init__(self):
         self.stack = deque()
@@ -194,7 +198,9 @@ def fromStringToList(string):
         l.append(char)
     return l
             
+# --------------------------------
 # Removing whitespaces
+# --------------------------------
 def removeWs(line):
     line = line.strip()
     line = line.rstrip()
@@ -203,9 +209,11 @@ def removeWs(line):
     line = line.replace('\n', "")
     return line
 
+# --------------------------------
 # Function called to set the facts
+# We loop through each fact, check if it is in the range [A:Z], and set it to True if it is
+# --------------------------------
 def setFacts(fact, initFacts):
-    # We loop through each fact, check if it is in the range [A:Z], and set it to True if it is
     for f in initFacts:
         if (ord(f) < 65 or ord(f) > 90):
             raise Exception(f, " is invalid.")
@@ -220,7 +228,10 @@ def setQuery(query, line):
         query.queriedFacts.append(char)
     return query
 
+# --------------------------------
 # Function called to parse the list of lines
+# --------------------------------
+
 def parseLines(lineList):
     i = 0
     while (i < len(lineList)):
@@ -232,7 +243,10 @@ def parseLines(lineList):
         i += 1
     return lineList
 
+# --------------------------------
 # Handles the parsing of the file
+# --------------------------------
+
 def fileParsing(filename):
     r = Rules()
     fact = Facts()
