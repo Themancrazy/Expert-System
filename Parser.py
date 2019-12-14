@@ -145,6 +145,13 @@ def parseLines(lineList):
         if (lineList[i] == "\n"):
             del lineList[i]
         i += 1
+    i = 0
+    while i < len(lineList):
+        if "<=>" in lineList[i]:
+            new = lineList[i].split("<=>")
+            new.reverse()
+            lineList[i] = new[0] + "=>" + new[1]
+        i += 1
     return lineList
 
 # --------------------------------

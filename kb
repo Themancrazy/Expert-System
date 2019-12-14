@@ -1,5 +1,6 @@
-B + C=>A + D + E + G
+A <=> B
+B + A => C
 
-?EGDA
+?C
 
-=BC
+=A
