@@ -12,14 +12,14 @@ import Parser as parser
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ>"
 globalFile = open("Logs", "w+")
 
-black = lambda text: '\033[0;30m' + text + '\033[0m'
-red = lambda text: '\033[0;31m' + text + '\033[0m'
-green = lambda text: '\033[0;32m' + text + '\033[0m'
-yellow = lambda text: '\033[0;33m' + text + '\033[0m'
-blue = lambda text: '\033[0;34m' + text + '\033[0m'
-magenta = lambda text: '\033[0;35m' + text + '\033[0m'
-cyan = lambda text: '\033[0;36m' + text + '\033[0m'
-white = lambda text: '\033[0;37m' + text + '\033[0m'
+black = lambda text: '\033[0;1;30m' + text + '\033[0m\x1b[1m'
+red = lambda text: '\033[0;31m' + text + '\033[0m\x1b[1m'
+green = lambda text: '\033[0;1;32m' + text + '\033[0m\x1b[1m'
+yellow = lambda text: '\033[0;1;33m' + text + '\033[0m\x1b[1m'
+cyan = lambda text: '\033[0;1;34m' + text + '\033[0m\x1b[1m'
+magenta = lambda text: '\033[0;1;35m' + text + '\033[0m\x1b[1m'
+blue = lambda text: '\033[0;1;36m' + text + '\033[0m\x1b[1m'
+white = lambda text: '\033[0;1;37m' + text + '\033[0m\x1b[1m'
 
 def getWeight(char):
     if char is '!':
@@ -227,7 +227,10 @@ class ExpertSystem:
         globalFile.write("================================================================================================\n")
         globalFile.write("Starting a new program:")
         globalFile.write("\n================================================================================================\n")
-        print("Rules:")
+        print(magenta("================================================================================================\n"))
+        print(magenta("Starting a new program:"))
+        print(magenta("\n================================================================================================\n"))
+        print(yellow("\x1b[4mRules:"))
         self.rules.display()
         print("\nWe are looking for " + str(self.queries.queriedFacts), end="\n\n")
         for query in self.queries.queriedFacts:
@@ -274,6 +277,9 @@ class ExpertSystem:
                 self.evaluate()
 
             elif line == "no":
+                print(red("\n================================================================================================\n"))
+                print(red("End of the program:"))
+                print(red("\n================================================================================================\n"))
                 break
 
             else:

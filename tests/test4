@@ -1,9 +1,0 @@
-B + !C => A
-
-?A
-=
-
-#With = empty, A should be False
-#With =B, A should be True
-#With =C, A should be False
-#With =BC, A should be False

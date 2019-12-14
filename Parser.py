@@ -45,7 +45,7 @@ class Facts:
             self.facts[fact]["visited"] = False
         for char in facts:
             if (ord(char) < 65 or ord(char) > 90):
-                raise Exception(char, " is invalid.")
+                raise Exception(char + " is invalid.")
             else:
                 self.facts[char]["value"] = True
         self.line = facts
@@ -62,7 +62,7 @@ class Query:
     def reset(self, newQueries):
         for char in newQueries:
             if (ord(char) < 65 or ord(char) > 90):
-                raise Exception(char, " is invalid.")
+                raise Exception(char + " is invalid.")
         self.queriedFacts = fromStringToList(newQueries)
 
 # --------------------------------
@@ -78,22 +78,22 @@ class Stack:
     def top(self):
         if len(self.stack) > 0:
             return self.stack[len(self.stack) - 1]
-        raise Exception("Stack is empty")
+        raise Exception('Stack is empty')
 
     def pop(self):
         if len(self.stack) > 0:
             return self.stack.pop()
-        raise Exception("Stack is empty")
+        raise Exception('Stack is empty')
 
     def display(self):
         if len(self.stack) > 0:
             for goal in self.stack:
                 print(goal)
         else:
-            print("Stack is empty")
+            print('Stack is empty')
 
 def isOperator(c):
-    if (c is '+' or c is '-' or c is '|' or c is '!'):
+    if (c is '+' or c is '-' or c is '|' or c is '^'):
         return 1
 
 def fromStringToList(string):
@@ -120,7 +120,7 @@ def removeWs(line):
 def setFacts(fact, initFacts):
     for f in initFacts:
         if (ord(f) < 65 or ord(f) > 90):
-            raise Exception(f, " is invalid.")
+            raise Exception(f +  " is invalid.")
         fact.facts[f]["value"] = True
         fact.line += f
     return fact
@@ -128,7 +128,7 @@ def setFacts(fact, initFacts):
 def setQuery(query, line):   
     for char in line:
         if (ord(char) < 65 or ord(char) > 90):
-            raise Exception(char, " is invalid.")
+            raise Exception(char + " is invalid.")
         query.queriedFacts.append(char)
     return query
 
@@ -154,6 +154,20 @@ def parseLines(lineList):
         i += 1
     return lineList
 
+def verifLine(line):
+    if "=>" not in line:
+        raise Exception(line + " is invalid.")
+        return False
+    i = 0
+    while (i < len(line)):
+        if i + 1 < len(line) and isOperator(line[i]) and isOperator(line[i + 1]):
+            raise Exception(line + " is invalid.")
+            return False
+        i += 1
+            
+    return True
+        
+
 # --------------------------------
 # Handles the parsing of the file
 # --------------------------------
@@ -174,5 +188,6 @@ def fileParsing(filename):
         elif line[0] == '?' and len(line) >= 1:
             query = setQuery(query, line[1:])
         else:
-            r.lines.append(removeWs(line))
+            if verifLine(line) is True:
+                r.lines.append(removeWs(line))
     return r, fact, query;
