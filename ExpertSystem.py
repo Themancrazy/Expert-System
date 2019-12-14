@@ -64,34 +64,25 @@ class ExpertSystem:
 
     def toRPN(self):
         stack = parser.Stack()
-        
         stack.push('#')
         newRules = []
-
         for rule in self.rules.lines:
             str = ""
-
             for char in rule:
-
                 if char in alphabet:
                     str += char
-
                 elif char is '(':
                     stack.push(char)
-
                 elif char is ')':
                     while (stack.top() is not '#' and stack.top() is not '('):
                         str += stack.top()
                         stack.pop()
-                    # Removing the '('
                     stack.pop()
-
                 elif char is '=' or char is '<':
                     while (stack.top() is not '#'):
                         str += stack.top()
                         stack.pop()
                     str += char
-
                 else:
                     if (getWeight(char) > getWeight(stack.top())):
                         stack.push(char)
@@ -100,13 +91,10 @@ class ExpertSystem:
                             str += stack.top()
                             stack.pop()
                         stack.push(char)
-
             while (stack.top() is not '#'):
                 str += stack.top()
                 stack.pop()
-
             newRules.append(str)
-
         newClass = parser.Rules()
         newClass.lines = newRules
         del self.rules
@@ -143,21 +131,15 @@ class ExpertSystem:
         if (self.facts.facts[goal]["visited"] is True):
             globalFile.write(goal + " has already been visited so we know its value is " + blue(str(self.facts.facts[goal]["value"])) + "\n")
             return self.facts.facts[goal]["value"]
-
         globalFile.write("Trying to determine " + red(goal) + "\n")
-
         res = self.facts.facts[goal]["value"]
         results = []
         indexes, goals = self.findGoalInRules(goal)
-
         globalFile.write("We found " + str(len(indexes)) + " rule(s) implying " + red(goal) + "\n")
-
         if len(indexes) > 0:
             for index in indexes:
                 rule = self.rules.lines[index][:self.rules.lines[index].find('=')]
-
-                globalFile.write("We need to evaluate " + green(rule) + "\n")
-
+                globalFile.write("\nWe need to evaluate " + green(rule) + "\n")
                 stack = parser.Stack()
                 for char in rule:
                     if (char.isalnum()):
@@ -200,38 +182,45 @@ class ExpertSystem:
                 results.append(res)
         t = 0
         f = 0
+        n = 0
         for result in results:
             if result is True:
                 t += 1
             elif result is False:
                 f += 1
+            else:
+                n += 1
         self.facts.facts[goal]["visited"] = True
         for g in goals:
-            if ((t > 0 and f > 0) or (f > 0 and t > 0)):
-                self.facts.facts[g]["value"] = None
-            if t > 0 and f == 0:
+            if ((t > 0 and f > 0) or (f > 0 and t > 0) or (n > 0)):
+                globalFile.write("We have an undetermined value so we ask the user if he wants to set it up manually\n")
+                line = input("The value of " + red(g) + " will be undetermined because the rules imply different results(" + red(str(t)) + blue(" True") + ", " + red(str(f)) + blue(" False") + " and " + red(str(n)) + blue(" Undetermined") + "). Do you want to set it up manually ? y/n")
+                if line == "y":
+                    while (True):
+                        line = input("Value (T/F): ")
+                        if (line == "T"):
+                            globalFile.write("The user sets it to " + blue("True")+ "\n")
+                            self.facts.facts[g]["value"] = True
+                            break
+                        elif line == "F":
+                            globalFile.write("The user sets it to " + blue("False")+ "\n")
+                            self.facts.facts[g]["value"] = False
+                            break
+                else:
+                    globalFile.write("The user lets it be " + blue("Undetermined")+ "\n")
+                    self.facts.facts[g]["value"] = None
+            elif t > 0 and f == 0:
                 self.facts.facts[g]["value"] = True
             elif t == 0 and f == 0:
                 pass
             else:
                 self.facts.facts[g]["value"] = False
         if len(indexes) == 0:
-            globalFile.write("We know from the given facts that " + goal + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n\n")
+            globalFile.write("We know from the given facts that " + red(goal) + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n")
         else:
-            globalFile.write("We determined that " + goal + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n\n")
+            globalFile.write("We determined that " + red(goal) + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n")
+        globalFile.write("Returning " + red(goal) + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n\n")
         return self.facts.facts[goal]["value"]
-        # if len(otherGoal) == 0:                
-        # if ((t > 0 and f > 0) or (f > 0 and t > 0)):
-        #     self.facts.facts[goal]["value"] = None
-        #     return None
-        # if t > 0 and f == 0:
-        #     self.facts.facts[goal]["value"] = True
-        #     return True
-        # elif t == 0 and f == 0:
-            # return self.facts.facts[goal]["value"]
-        # else:
-        #     self.facts.facts[goal]["value"] = False
-        #     return False
 
     # Printing the rules
     def evaluate(self):

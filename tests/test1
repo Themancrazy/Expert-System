@@ -1,0 +1,15 @@
+B=>A
+D+E=>B
+G+H=>F
+I+J=>G
+G=>H
+L+M=>K
+O+P=>L+N
+N=>M
+
+?AFKP
+
+=DEIJP
+
+#=DEIJP EXPECTED: AFP all True, K is False
+#=DEIJOP EXPECTED: AFKP all True

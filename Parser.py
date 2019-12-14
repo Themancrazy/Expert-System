@@ -24,7 +24,6 @@ class Facts:
                 "value": False,
                 "visited": False
             }
-            
         self.line = ""
 
     def display(self):

@@ -3,6 +3,7 @@ D ^ E => B
 B => C
 
 ?A
+=
 
 #With = empty, A should be False
 #With =D, A should be True

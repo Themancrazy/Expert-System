@@ -2,7 +2,7 @@ B=>A
 C=>A
 
 ?A
-
+=
 
 #With = empty, A should be False
 #With =B, A should be True
