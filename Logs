@@ -1,0 +1,57 @@
+================================================================================================
+Starting a new program:
+================================================================================================
+Trying to determine [0;31mE[0m
+We found 1 rule(s) implying [0;31mE[0m
+We need to evaluate [0;32mBC+[0m
+We need to recurse to find [0;31mC[0m
+
+Trying to determine [0;31mC[0m
+We found 0 rule(s) implying [0;31mC[0m
+We know from the given facts that C is [0;34mTrue[0m
+
+We need to recurse to find [0;31mB[0m
+
+Trying to determine [0;31mB[0m
+We found 0 rule(s) implying [0;31mB[0m
+We know from the given facts that B is [0;34mTrue[0m
+
+We determined that E is [0;34mTrue[0m
+
+Trying to determine [0;31mG[0m
+We found 1 rule(s) implying [0;31mG[0m
+We need to evaluate [0;32mBC+[0m
+We need to recurse to find [0;31mC[0m
+
+C has already been visited so we know its value is [0;34mTrue[0m
+We need to recurse to find [0;31mB[0m
+
+B has already been visited so we know its value is [0;34mTrue[0m
+We determined that G is [0;34mTrue[0m
+
+Trying to determine [0;31mD[0m
+We found 1 rule(s) implying [0;31mD[0m
+We need to evaluate [0;32mBC+[0m
+We need to recurse to find [0;31mC[0m
+
+C has already been visited so we know its value is [0;34mTrue[0m
+We need to recurse to find [0;31mB[0m
+
+B has already been visited so we know its value is [0;34mTrue[0m
+We determined that D is [0;34mTrue[0m
+
+Trying to determine [0;31mA[0m
+We found 1 rule(s) implying [0;31mA[0m
+We need to evaluate [0;32mBC+[0m
+We need to recurse to find [0;31mC[0m
+
+C has already been visited so we know its value is [0;34mTrue[0m
+We need to recurse to find [0;31mB[0m
+
+B has already been visited so we know its value is [0;34mTrue[0m
+We determined that A is [0;34mTrue[0m
+
+
+================================================================================================
+End of the program:
+================================================================================================

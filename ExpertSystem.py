@@ -10,6 +10,16 @@ import Parser as parser
 #       are currently trying to determine, and we use it for the recursion
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ>"
+globalFile = open("Logs", "w+")
+
+black = lambda text: '\033[0;30m' + text + '\033[0m'
+red = lambda text: '\033[0;31m' + text + '\033[0m'
+green = lambda text: '\033[0;32m' + text + '\033[0m'
+yellow = lambda text: '\033[0;33m' + text + '\033[0m'
+blue = lambda text: '\033[0;34m' + text + '\033[0m'
+magenta = lambda text: '\033[0;35m' + text + '\033[0m'
+cyan = lambda text: '\033[0;36m' + text + '\033[0m'
+white = lambda text: '\033[0;37m' + text + '\033[0m'
 
 def getWeight(char):
     if char is '!':
@@ -131,19 +141,30 @@ class ExpertSystem:
 
     def recurse(self, goal):
         if (self.facts.facts[goal]["visited"] is True):
+            globalFile.write(goal + " has already been visited so we know its value is " + blue(str(self.facts.facts[goal]["value"])) + "\n")
             return self.facts.facts[goal]["value"]
+
+        globalFile.write("Trying to determine " + red(goal) + "\n")
+
         res = self.facts.facts[goal]["value"]
         results = []
         indexes, goals = self.findGoalInRules(goal)
+
+        globalFile.write("We found " + str(len(indexes)) + " rule(s) implying " + red(goal) + "\n")
+
         if len(indexes) > 0:
             for index in indexes:
                 rule = self.rules.lines[index][:self.rules.lines[index].find('=')]
+
+                globalFile.write("We need to evaluate " + green(rule) + "\n")
+
                 stack = parser.Stack()
                 for char in rule:
                     if (char.isalnum()):
                         stack.push(char)
                     elif char is '!':
                         if type(stack.top()) is not bool:
+                            globalFile.write("We need to recurse to find " + red(stack.top()) + "\n\n")
                             op1 = self.recurse(stack.top())
                         else:
                             op1 = stack.top()
@@ -154,11 +175,13 @@ class ExpertSystem:
                             stack.push(False)
                     else:
                         if type(stack.top()) is not bool:
+                            globalFile.write("We need to recurse to find " + red(stack.top()) + "\n\n")
                             op1 = self.recurse(stack.top())
                         else:
                             op1 = stack.top()
                         stack.pop()
                         if type(stack.top()) is not bool:
+                            globalFile.write("We need to recurse to find " + red(stack.top()) + "\n\n")
                             op2 = self.recurse(stack.top())
                         else:
                             op2 = stack.top()
@@ -192,6 +215,10 @@ class ExpertSystem:
                 pass
             else:
                 self.facts.facts[g]["value"] = False
+        if len(indexes) == 0:
+            globalFile.write("We know from the given facts that " + goal + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n\n")
+        else:
+            globalFile.write("We determined that " + goal + " is " + blue(str(self.facts.facts[goal]["value"])) + "\n\n")
         return self.facts.facts[goal]["value"]
         # if len(otherGoal) == 0:                
         # if ((t > 0 and f > 0) or (f > 0 and t > 0)):
@@ -208,18 +235,24 @@ class ExpertSystem:
 
     # Printing the rules
     def evaluate(self):
+        globalFile.write("================================================================================================\n")
+        globalFile.write("Starting a new program:")
+        globalFile.write("\n================================================================================================\n")
         print("Rules:")
         self.rules.display()
-        print("\nWe are looking for " + str(self.queries.queriedFacts))
+        print("\nWe are looking for " + str(self.queries.queriedFacts), end="\n\n")
         for query in self.queries.queriedFacts:
             v = self.recurse(query)
             if v is True:
-                print(query + " is true")
+                print(red(query) + " is " + blue("true"))
             elif v is None:
-                print(query + " is undertermined")
+                print(red(query) + " is " + blue("undertermined"))
             else:
-                print(query + " is false")
+                print(red(query) + " is " + blue("false"))
         print()
+        globalFile.write("\n================================================================================================\n")
+        globalFile.write("End of the program:")
+        globalFile.write("\n================================================================================================\n")
 
     # ----------------------------------------------------------------------------------
     # Function called at the end of the evaluation to allow the user to ask for new queries

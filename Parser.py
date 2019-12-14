@@ -14,112 +14,17 @@ class Rules:
 
 class Facts:
     def __init__(self):
-        self.facts = {
-            'A': {
-                "value": False,
-                "visited": False
-            },
-            'B': {
-                "value": False,
-                "visited": False
-            },
-            'C': {
-                "value": False,
-                "visited": False
-            },
-            'D': {
-                "value": False,
-                "visited": False
-            },
-            'E': {
-                "value": False,
-                "visited": False
-            },
-            'F': {
-                "value": False,
-                "visited": False
-            },
-            'G': {
-                "value": False,
-                "visited": False
-            },
-            'H': {
-                "value": False,
-                "visited": False
-            },
-            'I': {
-                "value": False,
-                "visited": False
-            },
-            'J': {
-                "value": False,
-                "visited": False
-            },
-            'K': {
-                "value": False,
-                "visited": False
-            },
-            'L': {
-                "value": False,
-                "visited": False
-            },
-            'M': {
-                "value": False,
-                "visited": False
-            },
-            'N': {
-                "value": False,
-                "visited": False
-            },
-            'O': {
-                "value": False,
-                "visited": False
-            },
-            'P': {
-                "value": False,
-                "visited": False
-            },
-            'Q': {
-                "value": False,
-                "visited": False
-            },
-            'R': {
-                "value": False,
-                "visited": False
-            },
-            'S': {
-                "value": False,
-                "visited": False
-            },
-            'T': {
-                "value": False,
-                "visited": False
-            },
-            'U': {
-                "value": False,
-                "visited": False
-            },
-            'V': {
-                "value": False,
-                "visited": False
-            },
-            'W': {
-                "value": False,
-                "visited": False
-            },
-            'X': {
-                "value": False,
-                "visited": False
-            },
-            'Y': {
-                "value": False,
-                "visited": False
-            },
-            'Z': {
+        self.facts = {}
+        for index in range(26):
+            char = 'A'
+            i = ord(char)
+            i += index
+            char = chr(i)
+            self.facts[char] = {
                 "value": False,
                 "visited": False
             }
-        }
+            
         self.line = ""
 
     def display(self):
@@ -258,9 +163,9 @@ def fileParsing(filename):
     for line in lineList:
         if (len(line) is 0):
             pass
-        elif line[0] == '=' and len(line) > 1:
+        elif line[0] == '=' and len(line) >= 1:
             fact = setFacts(fact, line[1:])
-        elif line[0] == '?' and len(line) > 1:
+        elif line[0] == '?' and len(line) >= 1:
             query = setQuery(query, line[1:])
         else:
             r.lines.append(removeWs(line))
