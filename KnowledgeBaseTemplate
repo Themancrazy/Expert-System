@@ -1,0 +1,20 @@
+# This a template file:
+# In our Expert System, facts will be capital letters from A to Z.
+# This file will be a very very basic Knowledge Base, usually, a KB will be composed of hundreds of thousands of rules (for normal Expert Systems).
+# All facts will be put to False by default, if you want them to be set as True, you need to do it by putting the facts desired after an '=' sign. Example:
+
+=ABC                              # Here '=' will be the signal to put all the following facts to True.
+
+# Then you'd need to put some rules to affect the value of facts (Facts can be True, False or Undetermined (contradictive statements,...))
+
+A + B + C => D                    # This will be: If A and B and C are all True, then D is True.
+F <=> D + A                       # This will be: If and only if D and A are True, then F is True.
+X | Y => Q                        # This will be: If X or Y is True, then Q is True.
+
+# And finally you'd want to put some queried facts (what are their values ?)
+# This is the very basic element that makes this Expert System a backward chaining one (going from queried facts to determine their value).
+
+?Q                                # You put a fact (or facts) that you want to know the value of behind a '?' sign.
+?DA
+
+# Finally the program will output you the results of Q, D and A (in this case Q = False, D = True, A = True).

@@ -158,9 +158,15 @@ def verifLine(line):
     if "=>" not in line:
         raise Exception(line + " is invalid.")
         return False
+    if line.count("=>") > 1:
+        raise Exception(line + " is invalid.")
+        return False
     i = 0
     while (i < len(line)):
         if i + 1 < len(line) and isOperator(line[i]) and isOperator(line[i + 1]):
+            raise Exception(line + " is invalid.")
+            return False
+        if line[i] not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ()>=<+|^!":
             raise Exception(line + " is invalid.")
             return False
         i += 1

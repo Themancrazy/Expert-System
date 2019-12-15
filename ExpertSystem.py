@@ -224,12 +224,12 @@ class ExpertSystem:
 
     # Printing the rules
     def evaluate(self):
-        globalFile.write("================================================================================================\n")
+        globalFile.write("\x1b[1m================================================================================================\n")
         globalFile.write("Starting a new program:")
         globalFile.write("\n================================================================================================\n")
-        print(magenta("================================================================================================\n"))
-        print(magenta("Starting a new program:"))
-        print(magenta("\n================================================================================================\n"))
+        print(green("================================================================================================\n"))
+        print(green("Result of queried fact(s):"))
+        print(green("\n================================================================================================\n"))
         print(yellow("\x1b[4mRules:"))
         self.rules.display()
         print("\nWe are looking for " + str(self.queries.queriedFacts), end="\n\n")
@@ -278,7 +278,7 @@ class ExpertSystem:
 
             elif line == "no":
                 print(red("\n================================================================================================\n"))
-                print(red("End of the program:"))
+                print(red("End of the program: You can check the historic of everything that was queried in the Logs file."))
                 print(red("\n================================================================================================\n"))
                 break
 
